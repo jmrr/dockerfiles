@@ -13,13 +13,17 @@ Based on Jupyter's `all-spark-notebook`, this docker image provides the followin
 * Spark 1.6.0 for use in local mode or to connect to a cluster of Spark workers
 * Mesos client 0.22 binary that can communicate with a Mesos master
 
+### Build instructions
+
+1. Place the specific requirements of the project in `requirements.txt`
+2. Run `sudo docker build -t josemrivera/jupyter .`
 
 ### Running instructions
 
 Execute the following in a terminal with `sudo` access:
 
 ```
-docker run -d -p 8888:8888 -v /srv/jupyter:/home/jovyan/work -e NB_UID=1000 -e GRANT_SUDO=yes --user root jupyter/all-spark-notebook start-notebook.sh
+docker run -d -p 8888:8888 -v /srv/jupyter:/home/jovyan/work -e NB_UID=1000 -e GRANT_SUDO=yes --user root josemrivera/jupyter start-notebook.sh
 
 ```
 
