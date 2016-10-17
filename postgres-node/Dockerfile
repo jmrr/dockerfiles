@@ -7,9 +7,19 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97
 # Add PostgreSQL's repository.
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 
-# Install 
+# Install general dependencies
 RUN apt-get update &&\
     apt-get install -y \
+    curl \
+    git \
+    unzip
+
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
+
+# Install PostgreSQL and its dependencies
+RUN apt-get install -y \
     python-software-properties \
     software-properties-common \
     postgresql-9.3 \
@@ -19,10 +29,10 @@ RUN apt-get update &&\
 # Use ``postgres`` user
 USER postgres
 
-# Create user role with password
+# Create user role with password and create a db 'blackbox'
 RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
-    createdb -O docker docker
+    psql --command "CREATE USER deploy SUPERUSER PASSWORD 'docker';" &&\
+    createdb -O deploy blackbox
 
 # DB to allow remote connections
 RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
@@ -32,5 +42,10 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 # Expose the PostgreSQL port
 EXPOSE 5432
 
+# Add VOLUMEs to allow backup of config, logs and databases
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+
 # Set the default command to run when starting the container
 CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+
+
