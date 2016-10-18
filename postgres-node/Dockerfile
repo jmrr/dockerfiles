@@ -26,10 +26,6 @@ RUN apt-get install -y \
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get install -y nodejs
 
-# Install npm packages
-WORKDIR /blackbox
-RUN npm install
-
 # Use ``postgres`` user
 USER postgres
 
@@ -49,7 +45,9 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 EXPOSE 5432
 
 # Add VOLUMEs to allow backup of config, logs and databases
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+VOLUME  ["/blackbox", "/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+
+WORKDIR /blackbox
 
 USER postgres
 # Set the default command to run when starting the container
