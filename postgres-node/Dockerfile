@@ -41,15 +41,20 @@ RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.5/main/pg_hba.co
 
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 
-# Expose the PostgreSQL port
+# Copy init script
+COPY startup.sh /startup.sh
+RUN chmod 755 /startup.sh
+
+# Set the default command to run when starting the container
+CMD ["/startup.sh"]
+
+# Expose the PostgreSQL port, ngrok API 
 EXPOSE 5432
+EXPOSE 4040
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/blackbox", "/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 WORKDIR /blackbox
 
-USER postgres
-# Set the default command to run when starting the container
-CMD ["/usr/lib/postgresql/9.5/bin/postgres", "-D", "/var/lib/postgresql/9.5/main", "-c", "config_file=/etc/postgresql/9.5/main/postgresql.conf"]
 
