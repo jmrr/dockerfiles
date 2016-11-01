@@ -1,2 +1,5 @@
 #psql-node
 .env
+
+#node-psql-ngrok
+ngrok.yml
