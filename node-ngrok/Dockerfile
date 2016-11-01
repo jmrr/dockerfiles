@@ -17,7 +17,7 @@ COPY ngrok.yml /
 COPY startup.sh /
 RUN chmod 755 /startup.sh
 
-
+# Declare which script will be run when starting up the container
 ENTRYPOINT ["/bin/bash", "/startup.sh"]
 
 # Expose ngrok port for Node app
