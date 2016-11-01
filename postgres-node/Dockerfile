@@ -12,7 +12,8 @@ RUN apt-get update &&\
     apt-get install -y \
     curl \
     git \
-    unzip
+    unzip \
+    jq
 
 # Install PostgreSQL and its dependencies
 RUN apt-get install -y \
@@ -26,13 +27,13 @@ RUN apt-get install -y \
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get install -y nodejs
 
-# Use ``postgres`` user
-USER postgres
+# Use ``postgres`` user (created by the installation)
+#USER postgres
 
-# Create user role with password and create a db 'blackbox'
-RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER deploy SUPERUSER PASSWORD 'docker';" &&\
-    createdb -O deploy blackbox
+# Create user role with a temporary password and create a db specified by env vars
+#RUN    /etc/init.d/postgresql start &&\
+#    psql --command "CREATE USER $PGUSER SUPERUSER PASSWORD 'docker';" &&\
+#    createdb -O $PGUSER $PGDATABASE
 
 USER root
 
