@@ -4,7 +4,8 @@ MAINTAINER josemrivera@gmail.com
 # Install general dependencies
 RUN apt-get update &&\
     apt-get install -y \
-    unzip 
+    unzip \
+    jq
 
 # Download and extract ngrok
 RUN curl -o ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip 
