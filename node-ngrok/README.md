@@ -1,6 +1,6 @@
 # node-ngrok
 
-Node.js + ngrok tunneling of a Node app port (currently using the default 3000)
+Node.js + ngrok tunneling of a Node app port (currently using the default 3000). This docker image was developed as part of a research initiative within [Launchpad Recruits](https://www.launchpadrecruits.com), but you can change the image name and container tags according to your organisation.
 
 ## Configuring ngrok
 
