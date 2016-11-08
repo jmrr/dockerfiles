@@ -7,6 +7,9 @@ RUN apt-get update &&\
     unzip \
     jq
 
+#Install nodemon for service reloading
+RUN npm install -g nodemon
+
 # Download and extract ngrok
 RUN curl -o ngrok.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip 
 RUN unzip ngrok.zip -d /usr/local/bin/

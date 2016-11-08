@@ -12,4 +12,10 @@ export SERVER_HOST=$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[1].pub
 npm install
 
 # Run app
-node app.js
+if [ "$NODE_ENV" == "development" ]
+then
+  nodemon --debug=56745 app.js
+  #node --debug=5858 app.js
+else
+  node app.js
+fi
