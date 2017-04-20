@@ -1,6 +1,6 @@
 # docker-airflow
 
-Ubuntu Core latest + [Apache Airflow](airflow.incubator.apache.org)
+Ubuntu Core latest + [Apache Airflow](airflow.incubator.apache.org) 1.8.0
 
 This Dockerfile has [automated builds](https://registry.hub.docker.com/u/josemrivera/airflow/) enabled.
 
