@@ -3,18 +3,28 @@ MAINTAINER Jose Rivera <josemrivera@gmail.com>
 
 ENV TERM linux
 
-# Airflow
+# Airflow args and env vars
 ARG AIRFLOW_VERSION=1.8.0
+ARG AIRFLOW_HOME=/usr/local/airflow
+
+# Assuming local executor
+ENV EXECUTOR Local
 
 RUN apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
     python-pip \
     python-dev \
     python-setuptools \
-    build-essential
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    git \
+    && useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow
+
 
 # Airflow
-RUN pip install airflow
+RUN python -m pip install -U pip \
+    && pip install airflow[crypto,password,postgres]==$AIRFLOW_VERSION
 
 # Cleanup
 RUN apt-get clean \
@@ -26,11 +36,13 @@ RUN apt-get clean \
     /usr/share/doc \
     /usr/share/doc-base
 
-# Initialise db
-RUN airflow initdb
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-ENV AIRFLOW_HOME /airflow
-WORKDIR /airflow
+RUN chown -R airflow: ${AIRFLOW_HOME}
 
-EXPOSE 8080
-CMD ["airflow","webserver","-p","8080"]
+EXPOSE 8080 5555 8793
+
+USER airflow
+WORKDIR ${AIRFLOW_HOME}
+ENTRYPOINT ["/entrypoint.sh"]
