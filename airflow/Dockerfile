@@ -25,8 +25,7 @@ RUN apt-get update -yqq \
 
 # Airflow
 RUN python -m pip install -U pip \
-    && pip install airflow[crypto,postgres]==$AIRFLOW_VERSION \
-    && pip install psycopg2
+    && pip install airflow[crypto,postgres]==$AIRFLOW_VERSION
 
 # Cleanup
 RUN apt-get clean \
