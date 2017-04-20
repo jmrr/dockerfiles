@@ -7,9 +7,6 @@ ENV TERM linux
 ARG AIRFLOW_VERSION=1.8.0
 ARG AIRFLOW_HOME=/usr/local/airflow
 
-# Assuming local executor
-ENV EXECUTOR Local
-
 RUN apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
     python-pip \
@@ -18,13 +15,18 @@ RUN apt-get update -yqq \
     build-essential \
     libffi-dev \
     libssl-dev \
+    apt-utils \
     git \
+    netcat \
+    curl \
+    libpq-dev \
     && useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow
 
 
 # Airflow
 RUN python -m pip install -U pip \
-    && pip install airflow[crypto,password,postgres]==$AIRFLOW_VERSION
+    && pip install airflow[crypto,postgres]==$AIRFLOW_VERSION \
+    && pip install psycopg2
 
 # Cleanup
 RUN apt-get clean \
@@ -39,9 +41,11 @@ RUN apt-get clean \
 COPY scripts/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
+# Adjust ownership and permissions
 RUN chown -R airflow: ${AIRFLOW_HOME}
+RUN chmod +x /entrypoint.sh
 
-EXPOSE 8080 5555 8793
+EXPOSE 8080
 
 USER airflow
 WORKDIR ${AIRFLOW_HOME}
