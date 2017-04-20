@@ -1,0 +1,22 @@
+version: '2'
+services:
+    postgres:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+
+    webserver:
+        image: josemrivera/airflow
+        restart: always
+        depends_on:
+            - postgres
+        environment:
+            - LOAD_EX=y
+            - EXECUTOR=Local
+        # volumes:
+            # - ~/airflow/dags:/usr/local/airflow/dags
+        ports:
+            - "8888:8080"
+        command: webserver
