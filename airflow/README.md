@@ -7,7 +7,7 @@ This Dockerfile has [automated builds](https://registry.hub.docker.com/u/josemri
 ## Build
 
 ```
-docker build --rm -t josemrivera/docker-airflow .
+docker build --rm -t josemrivera/airflow .
 ```
 
 ## Usage
@@ -16,5 +16,5 @@ By default, docker-airflow runs Airflow with **SequentialExecutor** and
 **SQLite**:
 
 ```
-docker run -d -p 8080:8080 josemrivera/docker-airflow
+docker run -d -p 8080:8080 josemrivera/airflow
 ```
